@@ -167,7 +167,8 @@ bool SimpleDELAYAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* SimpleDELAYAudioProcessor::createEditor()
 {
-    return new SimpleDELAYAudioProcessorEditor (*this);
+    //return new SimpleDELAYAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -189,4 +190,21 @@ void SimpleDELAYAudioProcessor::setStateInformation (const void* data, int sizeI
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SimpleDELAYAudioProcessor();
+}
+
+//==============================================================================
+
+juce::AudioProcessorValueTreeState::ParameterLayout
+SimpleDELAYAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    
+    layout.add(
+       std::make_unique<juce::AudioParameterFloat>(
+          "Delay Time",
+          "Delay Time:",
+          juce::NormalisableRange<float>( 0.01f, 1.0f, 0.01f, 1.0f ),
+          0.25f ));
+               
+    return layout;
 }
