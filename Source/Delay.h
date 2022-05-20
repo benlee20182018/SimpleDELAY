@@ -181,8 +181,16 @@ private:
     Type maxDelayTime { Type (2) };
 
     //==============================================================================
-    void updateDelayLineSize() {}
+    void updateDelayLineSize() {
+        auto delayLineSizeSamples = (size_t) std::ceil (maxDelayTime * sampleRate);
+ 
+        for (auto& dline : delayLines)
+            dline.resize (delayLineSizeSamples);
+    }
 
     //==============================================================================
-    void updateDelayTime() noexcept {}
+    void updateDelayTime() noexcept {
+        for (size_t ch = 0; ch < maxNumChannels; ++ch)
+            delayTimesSample[ch] = (size_t) juce::roundToInt (delayTimes[ch] * sampleRate);
+    }
 };
