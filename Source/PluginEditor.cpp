@@ -38,3 +38,10 @@ void SimpleDELAYAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }
+
+//==============================================================================
+void SimpleDELAYAudioProcessor::setDelayTime(float delayTime) {
+    for (auto i = 0; i < delay.getNumChannels(); ++i) {
+        delay.setDelayTime( i, delayTime );
+    }
+}

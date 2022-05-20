@@ -47,7 +47,7 @@ public:
     /** Adds a new value to the delay line, overwriting the least recently added sample */
     void push (Type valueToAdd) noexcept
     {
-        ignoreUnused (valueToAdd);
+        juce::ignoreUnused (valueToAdd);
     }
 
 private:

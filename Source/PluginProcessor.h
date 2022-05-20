@@ -55,7 +55,9 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //===========================
-    Delay<float> delay();
+    Delay<float> delay;
+    
+    void setDelayTime(float delayTime);
     
     //===========================
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
