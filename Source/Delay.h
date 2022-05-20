@@ -63,9 +63,11 @@ public:
     //==============================================================================
     Delay()
     {
-        setMaxDelayTime (2.0f);
-        setDelayTime (0, 0.7f);
-        setDelayTime (1, 0.5f);
+        setMaxDelayTime (2000.0f);
+        //setDelayTime (0, 0.7f);
+        //setDelayTime (1, 0.5f);
+        setDelayTime (0, 1.0f);
+        setDelayTime (1, 100.0f);
         setWetLevel (0.8f);
         setFeedback (0.5f);
     }
@@ -125,6 +127,11 @@ public:
         jassert (newValue >= Type (0) && newValue <= Type (1));
         wetLevel = newValue;
     }
+    
+    void setGain(Type newValue) noexcept {
+        jassert (newValue >= Type (0) && newValue <= Type (1));
+        gain = newValue;
+    }
 
     //==============================================================================
     void setDelayTime (size_t channel, Type newValue)
@@ -168,7 +175,7 @@ public:
                 auto inputSample = input[i];
                 auto dlineInputSample = std::tanh (inputSample + feedback * delayedSample);
                 dline.push (dlineInputSample);
-                auto outputSample = inputSample + wetLevel * delayedSample;
+                auto outputSample = (inputSample + wetLevel * delayedSample) * gain;
                 output[i] = outputSample;
             }
         }
@@ -181,6 +188,7 @@ private:
     std::array<Type, maxNumChannels> delayTimes;
     Type feedback { Type (0) };
     Type wetLevel { Type (0) };
+    Type gain { Type(0) };
 
     std::array<juce::dsp::IIR::Filter<Type>, maxNumChannels> filters;
     typename juce::dsp::IIR::Coefficients<Type>::Ptr filterCoefs;
