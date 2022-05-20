@@ -22,6 +22,7 @@ SimpleDELAYAudioProcessor::SimpleDELAYAudioProcessor()
                        )
 #endif
 {
+    //this->delay.setMaxDelayTime( 1.0f );
 }
 
 SimpleDELAYAudioProcessor::~SimpleDELAYAudioProcessor()
