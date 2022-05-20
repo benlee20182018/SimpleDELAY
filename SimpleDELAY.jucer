@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="Tz2JDe" name="SimpleDELAY" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              cppLanguageStandard="latest">
   <MAINGROUP id="idSyI4" name="SimpleDELAY">
     <GROUP id="{DED53E04-C187-9822-1055-77583B9D86B3}" name="Source">
       <FILE id="KhEq6A" name="PluginProcessor.cpp" compile="1" resource="0"
