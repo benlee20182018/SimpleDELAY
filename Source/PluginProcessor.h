@@ -12,6 +12,14 @@
 #include "Delay.h"
 
 //==============================================================================
+struct DelaySettings {
+    float delayTime { 0.25f };
+};
+
+DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts);
+
+
+//==============================================================================
 /**
 */
 class SimpleDELAYAudioProcessor  : public juce::AudioProcessor

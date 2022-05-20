@@ -103,6 +103,10 @@ void SimpleDELAYAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     spec.numChannels = 2;
     
     delay.prepare( spec );
+    
+    auto delaySettings = GetDelaySettings( apvts );
+    
+    setDelayTime( delaySettings.delayTime );
 }
 
 void SimpleDELAYAudioProcessor::releaseResources()
@@ -207,4 +211,19 @@ SimpleDELAYAudioProcessor::createParameterLayout()
           0.25f ));
                
     return layout;
+}
+
+
+void SimpleDELAYAudioProcessor::setDelayTime(float delayTime) {
+    for (auto i = 0; i < delay.getNumChannels(); ++i) {
+        delay.setDelayTime( i, delayTime );
+    }
+}
+
+DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
+    DelaySettings delaySettings;
+    
+    delaySettings.delayTime = apvts.getRawParameterValue( "Delay Time" )->load();
+    
+    return delaySettings;
 }
