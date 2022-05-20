@@ -78,7 +78,8 @@ public:
         updateDelayLineSize();
         updateDelayTime();
 
-        filterCoefs = juce::dsp::IIR::Coefficients<Type>::makeFirstOrderLowPass (sampleRate, Type (1e3));
+        //filterCoefs = juce::dsp::IIR::Coefficients<Type>::makeFirstOrderLowPass (sampleRate, Type (1e3));
+        filterCoefs = juce::dsp::IIR::Coefficients<Type>::makeFirstOrderHighPass (sampleRate, Type (1e3));
 
         for (auto& f : filters)
         {
@@ -152,8 +153,6 @@ public:
         jassert (inputBlock.getNumSamples() == numSamples);
         jassert (inputBlock.getNumChannels() == numChannels);
 
-        juce::ignoreUnused (numSamples);
-
         for (size_t ch = 0; ch < numChannels; ++ch)
         {
             auto* input  = inputBlock .getChannelPointer (ch);
@@ -162,7 +161,16 @@ public:
             auto delayTime = delayTimesSample[ch];
             auto& filter = filters[ch];
 
-            juce::ignoreUnused (input, output, dline, delayTime, filter);
+            for (size_t i = 0; i < numSamples; ++i)
+            {
+                //auto delayedSample = dline.get (delayTime);
+                auto delayedSample = filter.processSample (dline.get (delayTime));
+                auto inputSample = input[i];
+                auto dlineInputSample = std::tanh (inputSample + feedback * delayedSample);
+                dline.push (dlineInputSample);
+                auto outputSample = inputSample + wetLevel * delayedSample;
+                output[i] = outputSample;
+            }
         }
     }
 
