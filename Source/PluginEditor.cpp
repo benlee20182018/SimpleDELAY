@@ -30,7 +30,7 @@ void SimpleDELAYAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.drawFittedText ("SimpleDELAY", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void SimpleDELAYAudioProcessorEditor::resized()
