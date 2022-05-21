@@ -29,25 +29,53 @@ public:
         return rawData[leastRecentIndex];
     }
 
+    /*
     Type get (size_t delayInSamples) const noexcept
     {
         jassert (delayInSamples >= 0 && delayInSamples < size());
         juce::ignoreUnused (delayInSamples);
-
+        
         return Type (0);
+    }
+    */
+
+    /** Set the specified sample in the delay line */
+    /*
+    void set (size_t delayInSamples, Type newValue) noexcept
+    {
+        jassert (delayInSamples >= 0 && delayInSamples < size());
+        ignoreUnused (delayInSamples, newValue);
+    }
+   */
+
+    /** Adds a new value to the delay line, overwriting the least recently added sample */
+    /*
+    void push (Type valueToAdd) noexcept
+    {
+        juce::ignoreUnused (valueToAdd);
+    }
+     */
+    
+    Type get (size_t delayInSamples) const noexcept
+    {
+        jassert (delayInSamples >= 0 && delayInSamples < size());
+
+        return rawData[(leastRecentIndex + 1 + delayInSamples) % size()];   // [3]
     }
 
     /** Set the specified sample in the delay line */
     void set (size_t delayInSamples, Type newValue) noexcept
     {
         jassert (delayInSamples >= 0 && delayInSamples < size());
-        ignoreUnused (delayInSamples, newValue);
+
+        rawData[(leastRecentIndex + 1 + delayInSamples) % size()] = newValue; // [4]
     }
 
     /** Adds a new value to the delay line, overwriting the least recently added sample */
     void push (Type valueToAdd) noexcept
     {
-        juce::ignoreUnused (valueToAdd);
+        rawData[leastRecentIndex] = valueToAdd;                                         // [1]
+        leastRecentIndex = leastRecentIndex == 0 ? size() - 1 : leastRecentIndex - 1;   // [2]
     }
 
 private:
