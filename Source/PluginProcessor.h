@@ -29,6 +29,7 @@ namespace DelaySettingIDs
     const std::string FEEDBACK         = "Feedback";
     const std::string WET_LEVEL        = "Wet Level";
     const std::string GAIN             = "Gain";
+    const std::string RESET            = "Reset to Defaults";
 };
 
 enum Channel {
@@ -85,15 +86,17 @@ public:
     //===========================
     Delay<float> delay;
     void updateDelaySettings();
+    void updateDelaySettings(const DelaySettings& delaySettings);
+    void resetDelaySettings();
     
     //===========================
-    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    static juce::AudioProcessorValueTreeState::ParameterLayout CreateParameterLayout();
     
     juce::AudioProcessorValueTreeState apvts {
         *this,
         nullptr,
         "Parameters",
-        createParameterLayout()
+        CreateParameterLayout()
     };
     
 private:

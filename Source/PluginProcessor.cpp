@@ -197,9 +197,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 }
 
 //==============================================================================
-
 juce::AudioProcessorValueTreeState::ParameterLayout
-SimpleDELAYAudioProcessor::createParameterLayout()
+SimpleDELAYAudioProcessor::CreateParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
     
@@ -241,9 +240,13 @@ SimpleDELAYAudioProcessor::createParameterLayout()
     return layout;
 }
 
+//==============================================================================
 void SimpleDELAYAudioProcessor::updateDelaySettings() {
     auto delaySettings = GetDelaySettings( apvts );
-    
+    updateDelaySettings(delaySettings);
+}
+
+void SimpleDELAYAudioProcessor::updateDelaySettings(const DelaySettings & delaySettings) {
     delay.setDelayTime( Channel::left, delaySettings.leftDelayTime );
     delay.setDelayTime( Channel::right, delaySettings.rightDelayTime );
     delay.setFeedback( delaySettings.feedback );
@@ -251,6 +254,11 @@ void SimpleDELAYAudioProcessor::updateDelaySettings() {
     delay.setGain( delaySettings.gain );
 }
 
+void SimpleDELAYAudioProcessor::resetDelaySettings() {
+    updateDelaySettings( DEFAULT_DELAY_SETTINGS );
+}
+
+//==============================================================================
 DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
     DelaySettings delaySettings;
     

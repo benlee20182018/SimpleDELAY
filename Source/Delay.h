@@ -125,7 +125,7 @@ public:
         for (auto& dline : delayLines)
             dline.clear();
     }
-
+    
     //==============================================================================
     size_t getNumChannels() const noexcept
     {
