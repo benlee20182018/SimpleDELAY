@@ -104,7 +104,7 @@ void SimpleDELAYAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     
     delay.prepare( spec );
 
-    configureDelay( );
+    updateDelaySettings( );
 }
 
 void SimpleDELAYAudioProcessor::releaseResources()
@@ -154,7 +154,7 @@ void SimpleDELAYAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    configureDelay();
+    updateDelaySettings();
     
     juce::dsp::AudioBlock<float> block(buffer);
     
@@ -205,10 +205,17 @@ SimpleDELAYAudioProcessor::createParameterLayout()
     
     layout.add(
        std::make_unique<juce::AudioParameterFloat>(
-          DelaySettingNames::DELAY_TIME,
-          DelaySettingNames::DELAY_TIME,
+          DelaySettingNames::LEFT_DELAY_TIME,
+          DelaySettingNames::LEFT_DELAY_TIME,
           juce::NormalisableRange<float>( 0.01f, 1000.0f, 0.01f, 1.0f ),
-          0.25f ));
+          DEFAULT_DELAY_SETTINGS.leftDelayTime ));
+               
+    layout.add(
+       std::make_unique<juce::AudioParameterFloat>(
+          DelaySettingNames::RIGHT_DELAY_TIME,
+          DelaySettingNames::RIGHT_DELAY_TIME,
+          juce::NormalisableRange<float>( 0.01f, 1000.0f, 0.01f, 1.0f ),
+          DEFAULT_DELAY_SETTINGS.rightDelayTime ));
                
     layout.add(
        std::make_unique<juce::AudioParameterFloat>(
@@ -227,16 +234,10 @@ SimpleDELAYAudioProcessor::createParameterLayout()
     return layout;
 }
 
-
-void SimpleDELAYAudioProcessor::setDelayTime(float delayTime) {
-    for (auto i = 0; i < delay.getNumChannels(); ++i) {
-        delay.setDelayTime( i, delayTime );
-    }
-}
-
-void SimpleDELAYAudioProcessor::configureDelay() {
+void SimpleDELAYAudioProcessor::updateDelaySettings() {
     auto delaySettings = GetDelaySettings( apvts );
-    //setDelayTime( delaySettings.delayTime );
+    delay.setDelayTime( DelaySettingNames::leftChannel, delaySettings.leftDelayTime );
+    delay.setDelayTime( DelaySettingNames::rightChannel, delaySettings.rightDelayTime );
     delay.setWetLevel( delaySettings.wetLevel );
     delay.setGain( delaySettings.gain );
 }
@@ -244,7 +245,8 @@ void SimpleDELAYAudioProcessor::configureDelay() {
 DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
     DelaySettings delaySettings;
     
-    delaySettings.delayTime = apvts.getRawParameterValue( DelaySettingNames::DELAY_TIME )->load();
+    delaySettings.leftDelayTime = apvts.getRawParameterValue( DelaySettingNames::LEFT_DELAY_TIME )->load();
+    delaySettings.rightDelayTime = apvts.getRawParameterValue( DelaySettingNames::RIGHT_DELAY_TIME )->load();
     delaySettings.wetLevel = apvts.getRawParameterValue( DelaySettingNames::WET_LEVEL )->load();
     delaySettings.gain = apvts.getRawParameterValue( DelaySettingNames::GAIN )->load();
     
