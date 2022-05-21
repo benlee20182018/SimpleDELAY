@@ -92,8 +92,6 @@ public:
     Delay()
     {
         setMaxDelayTime (2000.0f);
-        //setDelayTime (0, 0.7f);
-        //setDelayTime (1, 0.5f);
         setDelayTime (0, 1.0f);
         setDelayTime (1, 100.0f);
         setWetLevel (0.8f);

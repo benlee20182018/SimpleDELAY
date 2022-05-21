@@ -205,39 +205,48 @@ SimpleDELAYAudioProcessor::createParameterLayout()
     
     layout.add(
        std::make_unique<juce::AudioParameterFloat>(
-          DelaySettingNames::LEFT_DELAY_TIME,
-          DelaySettingNames::LEFT_DELAY_TIME,
+          DelaySettingIDs::LEFT_DELAY_TIME,
+          DelaySettingIDs::LEFT_DELAY_TIME,
           juce::NormalisableRange<float>( 0.01f, 1000.0f, 0.01f, 1.0f ),
           DEFAULT_DELAY_SETTINGS.leftDelayTime ));
                
     layout.add(
        std::make_unique<juce::AudioParameterFloat>(
-          DelaySettingNames::RIGHT_DELAY_TIME,
-          DelaySettingNames::RIGHT_DELAY_TIME,
+          DelaySettingIDs::RIGHT_DELAY_TIME,
+          DelaySettingIDs::RIGHT_DELAY_TIME,
           juce::NormalisableRange<float>( 0.01f, 1000.0f, 0.01f, 1.0f ),
           DEFAULT_DELAY_SETTINGS.rightDelayTime ));
                
     layout.add(
        std::make_unique<juce::AudioParameterFloat>(
-          DelaySettingNames::WET_LEVEL,
-          DelaySettingNames::WET_LEVEL,
+          DelaySettingIDs::FEEDBACK,
+          DelaySettingIDs::FEEDBACK,
           juce::NormalisableRange<float>( 0.0f, 1.0f, 0.01f, 1.0f ),
-          0.8f ));
+          DEFAULT_DELAY_SETTINGS.feedback ));
+               
+    layout.add(
+       std::make_unique<juce::AudioParameterFloat>(
+          DelaySettingIDs::WET_LEVEL,
+          DelaySettingIDs::WET_LEVEL,
+          juce::NormalisableRange<float>( 0.0f, 1.0f, 0.01f, 1.0f ),
+          DEFAULT_DELAY_SETTINGS.wetLevel ));
     
     layout.add(
        std::make_unique<juce::AudioParameterFloat>(
-          DelaySettingNames::GAIN,
-          DelaySettingNames::GAIN,
+          DelaySettingIDs::GAIN,
+          DelaySettingIDs::GAIN,
           juce::NormalisableRange<float>( 0.0f, 1.0f, 0.01f, 1.0f ),
-          1.0f ));
+          DEFAULT_DELAY_SETTINGS.gain ));
     
     return layout;
 }
 
 void SimpleDELAYAudioProcessor::updateDelaySettings() {
     auto delaySettings = GetDelaySettings( apvts );
-    delay.setDelayTime( DelaySettingNames::leftChannel, delaySettings.leftDelayTime );
-    delay.setDelayTime( DelaySettingNames::rightChannel, delaySettings.rightDelayTime );
+    
+    delay.setDelayTime( Channel::left, delaySettings.leftDelayTime );
+    delay.setDelayTime( Channel::right, delaySettings.rightDelayTime );
+    delay.setFeedback( delaySettings.feedback );
     delay.setWetLevel( delaySettings.wetLevel );
     delay.setGain( delaySettings.gain );
 }
@@ -245,10 +254,11 @@ void SimpleDELAYAudioProcessor::updateDelaySettings() {
 DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
     DelaySettings delaySettings;
     
-    delaySettings.leftDelayTime = apvts.getRawParameterValue( DelaySettingNames::LEFT_DELAY_TIME )->load();
-    delaySettings.rightDelayTime = apvts.getRawParameterValue( DelaySettingNames::RIGHT_DELAY_TIME )->load();
-    delaySettings.wetLevel = apvts.getRawParameterValue( DelaySettingNames::WET_LEVEL )->load();
-    delaySettings.gain = apvts.getRawParameterValue( DelaySettingNames::GAIN )->load();
+    delaySettings.leftDelayTime = apvts.getRawParameterValue( DelaySettingIDs::LEFT_DELAY_TIME )->load();
+    delaySettings.rightDelayTime = apvts.getRawParameterValue( DelaySettingIDs::RIGHT_DELAY_TIME )->load();
+    delaySettings.feedback = apvts.getRawParameterValue( DelaySettingIDs::FEEDBACK )->load();
+    delaySettings.wetLevel = apvts.getRawParameterValue( DelaySettingIDs::WET_LEVEL )->load();
+    delaySettings.gain = apvts.getRawParameterValue( DelaySettingIDs::GAIN )->load();
     
     return delaySettings;
 }

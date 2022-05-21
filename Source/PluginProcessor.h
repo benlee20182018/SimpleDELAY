@@ -15,23 +15,25 @@
 struct DelaySettings {
     float leftDelayTime  { 1.0f };
     float rightDelayTime { 100.0f };
+    float feedback       { 0.5f };
     float wetLevel       { 0.8f };
     float gain           { 1.0f };
 };
 
 static const DelaySettings DEFAULT_DELAY_SETTINGS;
 
-namespace DelaySettingNames
+namespace DelaySettingIDs
 {
     const std::string LEFT_DELAY_TIME  = "Left Delay Time";
     const std::string RIGHT_DELAY_TIME = "Right Delay Time";
+    const std::string FEEDBACK         = "Feedback";
     const std::string WET_LEVEL        = "Wet Level";
     const std::string GAIN             = "Gain";
+};
 
-    enum {
-        leftChannel=0,
-        rightChannel=1
-    };
+enum Channel {
+    left=0,
+    right=1
 };
 
 DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts);
