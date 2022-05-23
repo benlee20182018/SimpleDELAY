@@ -37,8 +37,6 @@ public:
     void resized() override;
     
 private:
-    std::vector<RotarySlider*> getSliders();
-    
     RotarySlider leftDelaySlider;
     RotarySlider rightDelaySlider;
     RotarySlider feedbackSlider;
@@ -54,8 +52,16 @@ private:
     Attachment wetLevelSliderAttachment;
     Attachment gainSliderAttachment;
     
+    juce::Label leftDelayLabel;
+    juce::Label rightDelayLabel;
+    juce::Label feedbackLabel;
+    juce::Label wetLevelLabel;
+    juce::Label gainLabel;
+    
     juce::TextButton resetButton;
-    //juce::ButtonParameterAttachment resetButtonAttachment;
+    
+    
+    std::vector<RotarySlider*> getSliders();
     
     void buttonClicked(juce::Button* button) override;
 
