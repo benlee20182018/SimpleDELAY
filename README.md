@@ -1,5 +1,7 @@
 # SimpleDELAY
 
+![Screenshot](./screenshot.png)
+
 This is an implementation of a simple stereo delay plug-in based on the JUCE framework.
 
 The plug-in is writen in C++. It is cross-platform and supports AU and VST3 formats.
