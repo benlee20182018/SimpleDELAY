@@ -13,6 +13,13 @@
 
 
 //==============================================================================
+struct RotarySlider : juce::Slider {
+    RotarySlider() : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
+                                  juce::Slider::TextEntryBoxPosition::TextBoxBelow ) {
+        
+    }
+};
+
 //==============================================================================
 /**
 */
@@ -30,28 +37,22 @@ public:
     void resized() override;
     
 private:
-    juce::Slider leftDelaySlider;
-    /*
-    juce::Label  leftDelayLabel;
-    juce::SliderParameterAttachment leftDelaySliderAttachment;
+    std::vector<RotarySlider*> getSliders();
     
-    juce::Slider rightDelaySlider;
-    juce::Label  rightDelayLabel;
-    juce::SliderParameterAttachment rightDelaySliderAttachment;
+    RotarySlider leftDelaySlider;
+    RotarySlider rightDelaySlider;
+    RotarySlider feedbackSlider;
+    RotarySlider wetLevelSlider;
+    RotarySlider gainSlider;
     
-    juce::Slider feedbackSlider;
-    juce::Label  feedbackLabel;
-    juce::SliderParameterAttachment feedbackSliderAttachment;
+    using APVTS = juce::AudioProcessorValueTreeState;
+    using Attachment = APVTS::SliderAttachment;
     
-    juce::Slider wetLevelSlider;
-    juce::Label  wetLevelLabel;
-    juce::SliderParameterAttachment wetLevelSliderAttachment;
-    
-    juce::Slider gainSlider;
-    juce::Label  gainLabel;
-    juce::SliderParameterAttachment gainSliderAttachment;
-    //void sliderValueChanged(juce::Slider* slider) override;
-     */
+    Attachment leftDelaySliderAttachment;
+    Attachment rightDelaySliderAttachment;
+    Attachment feedbackSliderAttachment;
+    Attachment wetLevelSliderAttachment;
+    Attachment gainSliderAttachment;
     
     juce::TextButton resetButton;
     //juce::ButtonParameterAttachment resetButtonAttachment;

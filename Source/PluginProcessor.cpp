@@ -170,8 +170,8 @@ bool SimpleDELAYAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* SimpleDELAYAudioProcessor::createEditor()
 {
-    //return new SimpleDELAYAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor(*this);
+    return new SimpleDELAYAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -276,3 +276,5 @@ DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
     
     return delaySettings;
 }
+
+

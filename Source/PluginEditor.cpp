@@ -11,11 +11,20 @@
 
 //==============================================================================
 SimpleDELAYAudioProcessorEditor::SimpleDELAYAudioProcessorEditor (SimpleDELAYAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p),
+    leftDelaySliderAttachment  ( p.getState(), DelaySettingIDs::LEFT_DELAY_TIME,  leftDelaySlider  ),
+    rightDelaySliderAttachment ( p.getState(), DelaySettingIDs::RIGHT_DELAY_TIME, rightDelaySlider ),
+    feedbackSliderAttachment   ( p.getState(), DelaySettingIDs::FEEDBACK,         feedbackSlider   ),
+    wetLevelSliderAttachment   ( p.getState(), DelaySettingIDs::WET_LEVEL,        wetLevelSlider   ),
+    gainSliderAttachment       ( p.getState(), DelaySettingIDs::GAIN,             gainSlider       ),
+    audioProcessor (p)
 {
     resetButton.setButtonText( "Reset Delay Settings");
     resetButton.addListener( this );
     addAndMakeVisible( &resetButton );
+    for (auto * slider : getSliders() ) {
+        addAndMakeVisible( slider );
+    }
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (800, 600);
@@ -30,10 +39,6 @@ void SimpleDELAYAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("SimpleDELAY", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void SimpleDELAYAudioProcessorEditor::resized()
@@ -45,9 +50,23 @@ void SimpleDELAYAudioProcessorEditor::resized()
     //resetButton.centreWithSize(100,50);
     auto bounds = getLocalBounds();
     
+    bounds.removeFromBottom( 25 );
+    
     auto resetButtonArea = bounds.removeFromBottom( 50 ).removeFromRight( bounds.getWidth() / 2 );
     resetButtonArea.setX( bounds.getWidth() / 4 );
     resetButton.setBounds( resetButtonArea );
+    
+    bounds.removeFromBottom( 50 );
+    
+    auto leftDelayArea = bounds.removeFromLeft( bounds.getWidth() * 0.33 );
+    auto rightDelayArea = bounds.removeFromRight( bounds.getWidth() * 0.5 );
+    
+    leftDelaySlider.setBounds( leftDelayArea );
+    rightDelaySlider.setBounds( rightDelayArea );
+    
+    feedbackSlider.setBounds( bounds.removeFromTop( bounds.getHeight() * 0.33) );
+    wetLevelSlider.setBounds( bounds.removeFromTop( bounds.getHeight() * 0.5 ) );
+    gainSlider.setBounds( bounds );
 }
 
 void SimpleDELAYAudioProcessorEditor::buttonClicked(juce::Button *button) {
@@ -55,4 +74,14 @@ void SimpleDELAYAudioProcessorEditor::buttonClicked(juce::Button *button) {
         std::cout << "Hello Rest Button" << std::endl;
         audioProcessor.resetDelaySettings();
     }
+}
+
+std::vector<RotarySlider*> SimpleDELAYAudioProcessorEditor::getSliders() {
+    return {
+        &leftDelaySlider,
+        &rightDelaySlider,
+        &feedbackSlider,
+        &wetLevelSlider,
+        &gainSlider
+    };
 }

@@ -86,7 +86,7 @@ public:
     //===========================
     void resetDelaySettings();
     
-    //juce::AudioProcessorValueTreeState & getState() { return apvts; };
+    juce::AudioProcessorValueTreeState & getState() { return apvts; };
     
 private:
     //===========================
