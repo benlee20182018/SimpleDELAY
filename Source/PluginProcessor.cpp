@@ -260,10 +260,6 @@ void SimpleDELAYAudioProcessor::updateDelaySettings(const DelaySettings & delayS
     delay.setGain( delaySettings.gain );
 }
 
-void SimpleDELAYAudioProcessor::resetDelaySettings() {
-    updateDelaySettings( DEFAULT_DELAY_SETTINGS );
-}
-
 //==============================================================================
 DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
     DelaySettings delaySettings;

@@ -71,8 +71,13 @@ void SimpleDELAYAudioProcessorEditor::resized()
 
 void SimpleDELAYAudioProcessorEditor::buttonClicked(juce::Button *button) {
     if (button == &resetButton) {
-        std::cout << "Hello Rest Button" << std::endl;
-        audioProcessor.resetDelaySettings();
+        std::cout << "Hello Reset Button" << std::endl;
+        //audioProcessor.resetDelaySettings();
+        leftDelaySlider.setValue( DEFAULT_DELAY_SETTINGS.leftDelayTime );
+        rightDelaySlider.setValue( DEFAULT_DELAY_SETTINGS.rightDelayTime );
+        feedbackSlider.setValue( DEFAULT_DELAY_SETTINGS.feedback );
+        wetLevelSlider.setValue( DEFAULT_DELAY_SETTINGS.wetLevel );
+        gainSlider.setValue( DEFAULT_DELAY_SETTINGS.gain );
     }
 }
 

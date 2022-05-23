@@ -84,8 +84,6 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //===========================
-    void resetDelaySettings();
-    
     juce::AudioProcessorValueTreeState & getState() { return apvts; };
     
 private:
