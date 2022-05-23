@@ -13,12 +13,12 @@
 SimpleDELAYAudioProcessorEditor::SimpleDELAYAudioProcessorEditor (SimpleDELAYAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
+    resetButton.setButtonText( "Reset Delay Settings");
+    resetButton.addListener( this );
+    addAndMakeVisible( &resetButton );
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (800, 600);
-    addAndMakeVisible( resetButton );
-    resetButton.setButtonText( "Reset Delay Settings");
-    resetButton.addListener( this );
 }
 
 SimpleDELAYAudioProcessorEditor::~SimpleDELAYAudioProcessorEditor()
@@ -40,9 +40,19 @@ void SimpleDELAYAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+    // x, y, width, height
+    //resetButton.setBounds (0, 0, getWidth() / 2, 50 );
+    //resetButton.centreWithSize(100,50);
+    auto bounds = getLocalBounds();
+    
+    auto resetButtonArea = bounds.removeFromBottom( 50 ).removeFromRight( bounds.getWidth() / 2 );
+    resetButtonArea.setX( bounds.getWidth() / 4 );
+    resetButton.setBounds( resetButtonArea );
 }
 
 void SimpleDELAYAudioProcessorEditor::buttonClicked(juce::Button *button) {
-    std::cout << "Hello Rest Button" << std::endl;
-    audioProcessor.resetDelaySettings();
+    if (button == &resetButton) {
+        std::cout << "Hello Rest Button" << std::endl;
+        audioProcessor.resetDelaySettings();
+    }
 }

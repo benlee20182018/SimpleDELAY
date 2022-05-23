@@ -14,7 +14,7 @@
 //==============================================================================
 struct DelaySettings {
     float leftDelayTime  { 1.0f };
-    float rightDelayTime { 100.0f };
+    float rightDelayTime { 2.0f };
     float feedback       { 0.5f };
     float wetLevel       { 0.8f };
     float gain           { 1.0f };
@@ -84,10 +84,15 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //===========================
+    void resetDelaySettings();
+    
+    //juce::AudioProcessorValueTreeState & getState() { return apvts; };
+    
+private:
+    //===========================
     Delay<float> delay;
     void updateDelaySettings();
     void updateDelaySettings(const DelaySettings& delaySettings);
-    void resetDelaySettings();
     
     //===========================
     static juce::AudioProcessorValueTreeState::ParameterLayout CreateParameterLayout();

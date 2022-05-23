@@ -13,9 +13,13 @@
 
 
 //==============================================================================
+//==============================================================================
 /**
 */
-class SimpleDELAYAudioProcessorEditor  : public juce::AudioProcessorEditor, juce::Button::Listener
+class SimpleDELAYAudioProcessorEditor :
+public juce::AudioProcessorEditor,
+public juce::Button::Listener//,
+//public juce::Slider::Listener
 {
 public:
     SimpleDELAYAudioProcessorEditor (SimpleDELAYAudioProcessor&);
@@ -26,16 +30,31 @@ public:
     void resized() override;
     
 private:
+    juce::Slider leftDelaySlider;
     /*
-    class ResetListener : public juce::Button::Listener {
-        void buttonClicked(juce::Button* button) override {
-            //audioProcessor.resetDelaySettings();
-        }
-        juce::TextButton resetButton;
-    };
+    juce::Label  leftDelayLabel;
+    juce::SliderParameterAttachment leftDelaySliderAttachment;
+    
+    juce::Slider rightDelaySlider;
+    juce::Label  rightDelayLabel;
+    juce::SliderParameterAttachment rightDelaySliderAttachment;
+    
+    juce::Slider feedbackSlider;
+    juce::Label  feedbackLabel;
+    juce::SliderParameterAttachment feedbackSliderAttachment;
+    
+    juce::Slider wetLevelSlider;
+    juce::Label  wetLevelLabel;
+    juce::SliderParameterAttachment wetLevelSliderAttachment;
+    
+    juce::Slider gainSlider;
+    juce::Label  gainLabel;
+    juce::SliderParameterAttachment gainSliderAttachment;
+    //void sliderValueChanged(juce::Slider* slider) override;
      */
     
     juce::TextButton resetButton;
+    //juce::ButtonParameterAttachment resetButtonAttachment;
     
     void buttonClicked(juce::Button* button) override;
 
