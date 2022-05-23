@@ -6,14 +6,12 @@ The plug-in is writen in C++. It is cross-platform and supports AU and VST3 form
 
 The core delay component is almost entirely based on the delay line found in the JUCE string model tutorial 
 (https://docs.juce.com/master/tutorial_dsp_delay_line.html#tutorial_dsp_delay_line_implement_delay_line). 
-
-The delay line is a simple circular buffer design that also leverages a JUCE highpass filter.
-The result is very sweet and smooth sounding delay. It is multi-channel capable out of the box, but in this application, only 2 channels are utilized.
-
 For this application, the original interface was extended to support control of feedback, wet and gain levels.
 
-The plug-in supports saving and restoring state.
+The delay's design is a simple circular buffer that also leverages a JUCE highpass filter.
+The result is very sweet and smooth sounding delay. It is multi-channel capable out of the box, but for this application, only 2 channels are utilized.
 
+The plug-in supports saving and restoring state.
 
 ## Controls
 
