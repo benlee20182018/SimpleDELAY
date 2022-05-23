@@ -64,9 +64,9 @@ public:
     //==============================================================================
     Delay()
     {
-        setMaxDelayTime (2000.0f);
+        setMaxDelayTime (4.0f);
         setDelayTime (0, 1.0f);
-        setDelayTime (1, 100.0f);
+        setDelayTime (1, 2.0f);
         setWetLevel (0.8f);
         setFeedback (0.5f);
     }

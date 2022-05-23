@@ -212,14 +212,14 @@ SimpleDELAYAudioProcessor::CreateParameterLayout()
        std::make_unique<juce::AudioParameterFloat>(
           DelaySettingIDs::LEFT_DELAY_TIME,
           DelaySettingIDs::LEFT_DELAY_TIME,
-          juce::NormalisableRange<float>( 0.01f, 1000.0f, 0.01f, 1.0f ),
+          juce::NormalisableRange<float>( 0.01f, 2.0f, 0.01f, 1.0f ),
           DEFAULT_DELAY_SETTINGS.leftDelayTime ));
                
     layout.add(
        std::make_unique<juce::AudioParameterFloat>(
           DelaySettingIDs::RIGHT_DELAY_TIME,
           DelaySettingIDs::RIGHT_DELAY_TIME,
-          juce::NormalisableRange<float>( 0.01f, 1000.0f, 0.01f, 1.0f ),
+          juce::NormalisableRange<float>( 0.01f, 2.0f, 0.01f, 1.0f ),
           DEFAULT_DELAY_SETTINGS.rightDelayTime ));
                
     layout.add(
