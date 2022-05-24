@@ -169,7 +169,6 @@ public:
 
             for (size_t i = 0; i < numSamples; ++i)
             {
-                //auto delayedSample = dline.get (delayTime);
                 auto delayedSample = filter.processSample (dline.get (delayTime));
                 auto inputSample = input[i];
                 auto dlineInputSample = std::tanh (inputSample + feedback * delayedSample);

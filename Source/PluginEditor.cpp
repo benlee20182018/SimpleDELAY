@@ -60,11 +60,6 @@ void SimpleDELAYAudioProcessorEditor::paint (juce::Graphics& g)
 
 void SimpleDELAYAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
-    // x, y, width, height
-    //resetButton.setBounds (0, 0, getWidth() / 2, 50 );
-    //resetButton.centreWithSize(100,50);
     auto bounds = getLocalBounds();
     
     auto center = bounds.getWidth() / 2;
@@ -92,8 +87,6 @@ void SimpleDELAYAudioProcessorEditor::resized()
     leftDelayLabel.setBounds( leftDelayLabelArea );
     rightDelayLabel.setBounds( rightDelayLabelArea );
     
-    
-    //auto labelHeight = bounds.getHeight() * 0.1;
     auto labelHeight = 20;
     auto pad = 20;
     auto width = bounds.getHeight() * 0.20;
@@ -111,12 +104,6 @@ void SimpleDELAYAudioProcessorEditor::resized()
     gainLabel.setBounds( x, y, width, labelHeight );
     y += labelHeight;
     gainSlider.setBounds( x, y, width, width );
-    /*
-    wetLevelLabel.setBounds( bounds.removeFromTop( bounds.getHeight() * 0.1 ) );
-    wetLevelSlider.setBounds( bounds.removeFromTop( bounds.getHeight() * 0.5 ) );
-    gainLabel.setBounds( bounds.removeFromTop( bounds.getHeight() * 0.1 ) );
-    gainSlider.setBounds( bounds.removeFromTop( bounds.getHeight() * 0.5 ) );
-     */
 }
 
 void SimpleDELAYAudioProcessorEditor::buttonClicked(juce::Button *button) {

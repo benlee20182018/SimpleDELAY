@@ -23,10 +23,7 @@ struct RotarySlider : juce::Slider {
 //==============================================================================
 /**
 */
-class SimpleDELAYAudioProcessorEditor :
-public juce::AudioProcessorEditor,
-public juce::Button::Listener//,
-//public juce::Slider::Listener
+class SimpleDELAYAudioProcessorEditor : public juce::AudioProcessorEditor, public juce::Button::Listener
 {
 public:
     SimpleDELAYAudioProcessorEditor (SimpleDELAYAudioProcessor&);
@@ -60,9 +57,7 @@ private:
     
     juce::TextButton resetButton;
     
-    
     std::vector<RotarySlider*> getSliders();
-    
     void buttonClicked(juce::Button* button) override;
 
 private:
