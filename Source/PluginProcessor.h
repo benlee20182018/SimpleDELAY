@@ -32,14 +32,6 @@ namespace DelaySettingIDs
     const std::string RESET            = "Reset to Defaults";
 };
 
-enum Channel {
-    left=0,
-    right=1
-};
-
-DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts);
-
-
 //==============================================================================
 /**
 */
@@ -92,7 +84,6 @@ private:
     void updateDelaySettings();
     void updateDelaySettings(const DelaySettings& delaySettings);
     
-    //===========================
     static juce::AudioProcessorValueTreeState::ParameterLayout CreateParameterLayout();
     
     juce::AudioProcessorValueTreeState apvts {

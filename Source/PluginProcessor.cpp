@@ -247,20 +247,6 @@ SimpleDELAYAudioProcessor::CreateParameterLayout()
 }
 
 //==============================================================================
-void SimpleDELAYAudioProcessor::updateDelaySettings() {
-    auto delaySettings = GetDelaySettings( apvts );
-    updateDelaySettings(delaySettings);
-}
-
-void SimpleDELAYAudioProcessor::updateDelaySettings(const DelaySettings & delaySettings) {
-    delay.setDelayTime( Channel::left, delaySettings.leftDelayTime );
-    delay.setDelayTime( Channel::right, delaySettings.rightDelayTime );
-    delay.setFeedback( delaySettings.feedback );
-    delay.setWetLevel( delaySettings.wetLevel );
-    delay.setGain( delaySettings.gain );
-}
-
-//==============================================================================
 DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
     DelaySettings delaySettings;
     
@@ -273,4 +259,21 @@ DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
     return delaySettings;
 }
 
+//==============================================================================
+void SimpleDELAYAudioProcessor::updateDelaySettings() {
+    auto delaySettings = GetDelaySettings( apvts );
+    updateDelaySettings(delaySettings);
+}
 
+enum Channel {
+    left=0,
+    right=1
+};
+
+void SimpleDELAYAudioProcessor::updateDelaySettings(const DelaySettings & delaySettings) {
+    delay.setDelayTime( Channel::left, delaySettings.leftDelayTime );
+    delay.setDelayTime( Channel::right, delaySettings.rightDelayTime );
+    delay.setFeedback( delaySettings.feedback );
+    delay.setWetLevel( delaySettings.wetLevel );
+    delay.setGain( delaySettings.gain );
+}
