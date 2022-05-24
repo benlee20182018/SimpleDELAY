@@ -22,24 +22,21 @@ SimpleDELAYAudioProcessorEditor::SimpleDELAYAudioProcessorEditor (SimpleDELAYAud
     resetButton.setButtonText( "Reset Delay Settings");
     resetButton.addListener( this );
     addAndMakeVisible( &resetButton );
+    
     for (auto * slider : getSliders() ) {
         addAndMakeVisible( slider );
     }
     
-    leftDelayLabel.setText( DelaySettingIDs::LEFT_DELAY_TIME, juce::NotificationType::dontSendNotification );
-    leftDelayLabel.setJustificationType( juce::Justification::Flags::horizontallyCentred );
+    leftDelayLabel.setText( DelaySettingIDs::LEFT_DELAY_TIME );
+    rightDelayLabel.setText( DelaySettingIDs::RIGHT_DELAY_TIME );
+    feedbackLabel.setText( DelaySettingIDs::FEEDBACK );
+    wetLevelLabel.setText( DelaySettingIDs::WET_LEVEL );
+    gainLabel.setText( DelaySettingIDs::GAIN );
+    
     addAndMakeVisible( leftDelayLabel );
-    rightDelayLabel.setText( DelaySettingIDs::RIGHT_DELAY_TIME, juce::NotificationType::dontSendNotification );
-    rightDelayLabel.setJustificationType( juce::Justification::Flags::horizontallyCentred );
     addAndMakeVisible( rightDelayLabel );
-    feedbackLabel.setText( DelaySettingIDs::FEEDBACK, juce::NotificationType::dontSendNotification );
-    feedbackLabel.setJustificationType( juce::Justification::Flags::horizontallyCentred );
     addAndMakeVisible( feedbackLabel );
-    wetLevelLabel.setText( DelaySettingIDs::WET_LEVEL, juce::NotificationType::dontSendNotification );
-    wetLevelLabel.setJustificationType( juce::Justification::Flags::horizontallyCentred );
     addAndMakeVisible( wetLevelLabel );
-    gainLabel.setText( DelaySettingIDs::GAIN, juce::NotificationType::dontSendNotification );
-    gainLabel.setJustificationType( juce::Justification::Flags::horizontallyCentred );
     addAndMakeVisible( gainLabel );
     
     // Make sure that before the constructor has finished, you've set the
@@ -58,6 +55,9 @@ void SimpleDELAYAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 }
 
+/**
+ ASSUMPTION: setSize( 800,600 ).
+ */
 void SimpleDELAYAudioProcessorEditor::resized()
 {
     auto bounds = getLocalBounds();

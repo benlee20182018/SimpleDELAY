@@ -13,10 +13,23 @@
 
 
 //==============================================================================
+/**
+   Extensions for streamlining construction.
+ */
 struct RotarySlider : juce::Slider {
     RotarySlider() : juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag,
                                   juce::Slider::TextEntryBoxPosition::TextBoxBelow ) {
         
+    }
+};
+
+struct Label : juce::Label {
+    Label() : juce::Label() {
+        setJustificationType( juce::Justification::Flags::horizontallyCentred );
+    }
+    
+    void setText(const std::string & text) {
+        juce::Label::setText( text, juce::NotificationType::dontSendNotification );
     }
 };
 
@@ -49,11 +62,11 @@ private:
     Attachment wetLevelSliderAttachment;
     Attachment gainSliderAttachment;
     
-    juce::Label leftDelayLabel;
-    juce::Label rightDelayLabel;
-    juce::Label feedbackLabel;
-    juce::Label wetLevelLabel;
-    juce::Label gainLabel;
+    Label leftDelayLabel;
+    Label rightDelayLabel;
+    Label feedbackLabel;
+    Label wetLevelLabel;
+    Label gainLabel;
     
     juce::TextButton resetButton;
     
