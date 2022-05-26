@@ -243,6 +243,12 @@ SimpleDELAYAudioProcessor::CreateParameterLayout()
           juce::NormalisableRange<float>( 0.0f, 1.0f, 0.01f, 1.0f ),
           DEFAULT_DELAY_SETTINGS.gain ));
     
+    layout.add(
+       std::make_unique<juce::AudioParameterBool>(
+          DelaySettingIDs::TEMPO_SYNC,
+          DelaySettingIDs::TEMPO_SYNC,
+          DEFAULT_DELAY_SETTINGS.tempoSync ));
+    
     return layout;
 }
 
@@ -255,6 +261,7 @@ DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
     delaySettings.feedback = apvts.getRawParameterValue( DelaySettingIDs::FEEDBACK )->load();
     delaySettings.wetLevel = apvts.getRawParameterValue( DelaySettingIDs::WET_LEVEL )->load();
     delaySettings.gain = apvts.getRawParameterValue( DelaySettingIDs::GAIN )->load();
+    delaySettings.tempoSync = apvts.getRawParameterValue( DelaySettingIDs::TEMPO_SYNC )->load();
     
     return delaySettings;
 }
@@ -271,8 +278,26 @@ enum Channel {
 };
 
 void SimpleDELAYAudioProcessor::updateDelaySettings(const DelaySettings & delaySettings) {
-    delay.setDelayTime( Channel::left, delaySettings.leftDelayTime );
-    delay.setDelayTime( Channel::right, delaySettings.rightDelayTime );
+    auto leftDelayTime = delaySettings.leftDelayTime;
+    auto rightDelayTime = delaySettings.rightDelayTime;
+    
+    if ( delaySettings.tempoSync ) {
+        if (auto * playHead = getPlayHead() ) {
+            juce::AudioPlayHead::CurrentPositionInfo info;
+            playHead->getCurrentPosition( info );
+            //std::cout << "BPM: " << info.bpm << std::endl;
+            //std::cout << "TS:  " << info.timeSigNumerator << "/" << info.timeSigDenominator << std::endl;
+            if ( info.bpm > 0 ) {
+                auto time = 60 / info.bpm;
+                leftDelayTime = time;
+                rightDelayTime = time * 2;
+                //std::cout << "tempo sync delay time = " << time << std::endl;
+            }
+        }
+    }
+   
+    delay.setDelayTime( Channel::left, leftDelayTime );
+    delay.setDelayTime( Channel::right, rightDelayTime );
     delay.setFeedback( delaySettings.feedback );
     delay.setWetLevel( delaySettings.wetLevel );
     delay.setGain( delaySettings.gain );

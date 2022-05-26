@@ -17,11 +17,21 @@ SimpleDELAYAudioProcessorEditor::SimpleDELAYAudioProcessorEditor (SimpleDELAYAud
     feedbackSliderAttachment   ( p.getState(), DelaySettingIDs::FEEDBACK,         feedbackSlider   ),
     wetLevelSliderAttachment   ( p.getState(), DelaySettingIDs::WET_LEVEL,        wetLevelSlider   ),
     gainSliderAttachment       ( p.getState(), DelaySettingIDs::GAIN,             gainSlider       ),
+    tempoSyncButtonAttachment  ( p.getState(), DelaySettingIDs::TEMPO_SYNC,       tempoSyncButton  ),
     audioProcessor (p)
 {
-    resetButton.setButtonText( "Reset Delay Settings");
-    resetButton.addListener( this );
+    tempoSyncButton.setName( DelaySettingIDs::TEMPO_SYNC );
+    tempoSyncButton.setButtonText( DelaySettingIDs::TEMPO_SYNC );
+    //tempoSyncButton.onClick = [this] { updateDelayTimeSliderValues(); };
+    addAndMakeVisible( tempoSyncButton );
+    
+    resetButton.setName( DelaySettingIDs::RESET );
+    resetButton.setButtonText( DelaySettingIDs::RESET );
+    resetButton.onClick = [this] { onResetButtonClicked(); };
     addAndMakeVisible( &resetButton );
+    
+    leftDelaySlider.onValueChange = [this] { updateTempoSyncToggleState(); };
+    rightDelaySlider.onValueChange = [this] { updateTempoSyncToggleState(); };
     
     for (auto * slider : getSliders() ) {
         addAndMakeVisible( slider );
@@ -29,6 +39,7 @@ SimpleDELAYAudioProcessorEditor::SimpleDELAYAudioProcessorEditor (SimpleDELAYAud
     
     leftDelayLabel.setText( DelaySettingIDs::LEFT_DELAY_TIME );
     rightDelayLabel.setText( DelaySettingIDs::RIGHT_DELAY_TIME );
+    
     feedbackLabel.setText( DelaySettingIDs::FEEDBACK );
     wetLevelLabel.setText( DelaySettingIDs::WET_LEVEL );
     gainLabel.setText( DelaySettingIDs::GAIN );
@@ -78,7 +89,9 @@ void SimpleDELAYAudioProcessorEditor::resized()
     auto leftDelayLabelArea = leftDelayArea.removeFromTop( bounds.getHeight() * 0.1 );
     auto rightDelayLabelArea = rightDelayArea.removeFromTop( bounds.getHeight() * 0.1 );
     
-    leftDelayArea.removeFromBottom( bounds.getHeight() * 0.33 );
+    auto tempoSyncArea = leftDelayArea.removeFromBottom( bounds.getHeight() * 0.33 );
+    tempoSyncArea.removeFromLeft( 50 );
+    
     rightDelayArea.removeFromBottom( bounds.getHeight() * 0.33 );
     
     leftDelaySlider.setBounds( leftDelayArea );
@@ -86,6 +99,8 @@ void SimpleDELAYAudioProcessorEditor::resized()
     
     leftDelayLabel.setBounds( leftDelayLabelArea );
     rightDelayLabel.setBounds( rightDelayLabelArea );
+    
+    tempoSyncButton.setBounds( tempoSyncArea );
     
     auto labelHeight = 20;
     auto pad = 20;
@@ -106,13 +121,19 @@ void SimpleDELAYAudioProcessorEditor::resized()
     gainSlider.setBounds( x, y, width, width );
 }
 
-void SimpleDELAYAudioProcessorEditor::buttonClicked(juce::Button *button) {
-    if (button == &resetButton) {
-        leftDelaySlider.setValue( DEFAULT_DELAY_SETTINGS.leftDelayTime );
-        rightDelaySlider.setValue( DEFAULT_DELAY_SETTINGS.rightDelayTime );
-        feedbackSlider.setValue( DEFAULT_DELAY_SETTINGS.feedback );
-        wetLevelSlider.setValue( DEFAULT_DELAY_SETTINGS.wetLevel );
-        gainSlider.setValue( DEFAULT_DELAY_SETTINGS.gain );
+void SimpleDELAYAudioProcessorEditor::onResetButtonClicked() {
+    leftDelaySlider.setValue( DEFAULT_DELAY_SETTINGS.leftDelayTime );
+    rightDelaySlider.setValue( DEFAULT_DELAY_SETTINGS.rightDelayTime );
+    feedbackSlider.setValue( DEFAULT_DELAY_SETTINGS.feedback );
+    wetLevelSlider.setValue( DEFAULT_DELAY_SETTINGS.wetLevel );
+    gainSlider.setValue( DEFAULT_DELAY_SETTINGS.gain );
+    tempoSyncButton.setToggleState( DEFAULT_DELAY_SETTINGS.tempoSync, juce::sendNotification );
+}
+
+void SimpleDELAYAudioProcessorEditor::updateTempoSyncToggleState() {
+    auto state = tempoSyncButton.getToggleState();
+    if (state) {
+        tempoSyncButton.setToggleState( !state, juce::sendNotification );
     }
 }
 

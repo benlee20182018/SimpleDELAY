@@ -36,7 +36,7 @@ struct Label : juce::Label {
 //==============================================================================
 /**
 */
-class SimpleDELAYAudioProcessorEditor : public juce::AudioProcessorEditor, public juce::Button::Listener
+class SimpleDELAYAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
     SimpleDELAYAudioProcessorEditor (SimpleDELAYAudioProcessor&);
@@ -54,13 +54,13 @@ private:
     RotarySlider gainSlider;
     
     using APVTS = juce::AudioProcessorValueTreeState;
-    using Attachment = APVTS::SliderAttachment;
+    using SliderAttachment = APVTS::SliderAttachment;
     
-    Attachment leftDelaySliderAttachment;
-    Attachment rightDelaySliderAttachment;
-    Attachment feedbackSliderAttachment;
-    Attachment wetLevelSliderAttachment;
-    Attachment gainSliderAttachment;
+    SliderAttachment leftDelaySliderAttachment;
+    SliderAttachment rightDelaySliderAttachment;
+    SliderAttachment feedbackSliderAttachment;
+    SliderAttachment wetLevelSliderAttachment;
+    SliderAttachment gainSliderAttachment;
     
     Label leftDelayLabel;
     Label rightDelayLabel;
@@ -68,10 +68,16 @@ private:
     Label wetLevelLabel;
     Label gainLabel;
     
+    using ButtonAttachment = APVTS::ButtonAttachment;
+    
+    juce::ToggleButton tempoSyncButton;
+    ButtonAttachment tempoSyncButtonAttachment;
+    
     juce::TextButton resetButton;
     
     std::vector<RotarySlider*> getSliders();
-    void buttonClicked(juce::Button* button) override;
+    void onResetButtonClicked();
+    void updateTempoSyncToggleState();
 
 private:
     // This reference is provided as a quick way for your editor to

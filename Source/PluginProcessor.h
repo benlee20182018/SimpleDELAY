@@ -18,6 +18,7 @@ struct DelaySettings {
     float feedback       { 0.5f };
     float wetLevel       { 0.8f };
     float gain           { 1.0f };
+    bool  tempoSync      { false };
 };
 
 static const DelaySettings DEFAULT_DELAY_SETTINGS;
@@ -29,6 +30,7 @@ namespace DelaySettingIDs
     const std::string FEEDBACK         = "Feedback";
     const std::string WET_LEVEL        = "Wet Level";
     const std::string GAIN             = "Gain";
+    const std::string TEMPO_SYNC       = "Tempo Sync";
     const std::string RESET            = "Reset to Defaults";
 };
 
