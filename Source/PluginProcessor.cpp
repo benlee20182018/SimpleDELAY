@@ -10,6 +10,9 @@
 #include "PluginEditor.h"
 
 //==============================================================================
+static const juce::NormalisableRange<float> DELAY_RANGE { 0.01f, 2.0f, 0.01f, 1.0f };
+
+//==============================================================================
 SimpleDELAYAudioProcessor::SimpleDELAYAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
@@ -212,14 +215,14 @@ SimpleDELAYAudioProcessor::CreateParameterLayout()
        std::make_unique<juce::AudioParameterFloat>(
           DelaySettingIDs::LEFT_DELAY_TIME,
           DelaySettingIDs::LEFT_DELAY_TIME,
-          juce::NormalisableRange<float>( 0.01f, 2.0f, 0.01f, 1.0f ),
+          DELAY_RANGE,
           DEFAULT_DELAY_SETTINGS.leftDelayTime ));
                
     layout.add(
        std::make_unique<juce::AudioParameterFloat>(
           DelaySettingIDs::RIGHT_DELAY_TIME,
           DelaySettingIDs::RIGHT_DELAY_TIME,
-          juce::NormalisableRange<float>( 0.01f, 2.0f, 0.01f, 1.0f ),
+          DELAY_RANGE,
           DEFAULT_DELAY_SETTINGS.rightDelayTime ));
                
     layout.add(
@@ -287,11 +290,15 @@ void SimpleDELAYAudioProcessor::updateDelaySettings(const DelaySettings & delayS
             playHead->getCurrentPosition( info );
             //std::cout << "BPM: " << info.bpm << std::endl;
             //std::cout << "TS:  " << info.timeSigNumerator << "/" << info.timeSigDenominator << std::endl;
+            
             if ( info.bpm > 0 ) {
                 auto time = 60 / info.bpm;
-                leftDelayTime = time;
-                rightDelayTime = time * 2;
-                //std::cout << "tempo sync delay time = " << time << std::endl;
+                
+                leftDelayTime = DELAY_RANGE.convertTo0to1( time );
+                rightDelayTime = DELAY_RANGE.convertTo0to1( time * 2 );
+                
+                apvts.getParameter( DelaySettingIDs::LEFT_DELAY_TIME )->setValueNotifyingHost( leftDelayTime );
+                apvts.getParameter( DelaySettingIDs::RIGHT_DELAY_TIME )->setValueNotifyingHost( rightDelayTime );
             }
         }
     }

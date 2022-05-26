@@ -31,7 +31,7 @@ SimpleDELAYAudioProcessorEditor::SimpleDELAYAudioProcessorEditor (SimpleDELAYAud
     addAndMakeVisible( &resetButton );
     
     leftDelaySlider.onValueChange = [this] { updateTempoSyncToggleState(); };
-    rightDelaySlider.onValueChange = [this] { updateTempoSyncToggleState(); };
+    //rightDelaySlider.onValueChange = [this] { updateTempoSyncToggleState(); };
     
     for (auto * slider : getSliders() ) {
         addAndMakeVisible( slider );
@@ -131,10 +131,13 @@ void SimpleDELAYAudioProcessorEditor::onResetButtonClicked() {
 }
 
 void SimpleDELAYAudioProcessorEditor::updateTempoSyncToggleState() {
+    std::cout << "toggle" << std::endl;
+    /*
     auto state = tempoSyncButton.getToggleState();
     if (state) {
         tempoSyncButton.setToggleState( !state, juce::sendNotification );
     }
+     */
 }
 
 std::vector<RotarySlider*> SimpleDELAYAudioProcessorEditor::getSliders() {
