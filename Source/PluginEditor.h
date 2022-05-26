@@ -77,7 +77,6 @@ private:
     
     std::vector<RotarySlider*> getSliders();
     void onResetButtonClicked();
-    void updateTempoSyncToggleState();
 
 private:
     // This reference is provided as a quick way for your editor to

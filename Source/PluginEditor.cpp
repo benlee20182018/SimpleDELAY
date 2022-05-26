@@ -22,16 +22,12 @@ SimpleDELAYAudioProcessorEditor::SimpleDELAYAudioProcessorEditor (SimpleDELAYAud
 {
     tempoSyncButton.setName( DelaySettingIDs::TEMPO_SYNC );
     tempoSyncButton.setButtonText( DelaySettingIDs::TEMPO_SYNC );
-    //tempoSyncButton.onClick = [this] { updateDelayTimeSliderValues(); };
     addAndMakeVisible( tempoSyncButton );
     
     resetButton.setName( DelaySettingIDs::RESET );
     resetButton.setButtonText( DelaySettingIDs::RESET );
     resetButton.onClick = [this] { onResetButtonClicked(); };
     addAndMakeVisible( &resetButton );
-    
-    leftDelaySlider.onValueChange = [this] { updateTempoSyncToggleState(); };
-    //rightDelaySlider.onValueChange = [this] { updateTempoSyncToggleState(); };
     
     for (auto * slider : getSliders() ) {
         addAndMakeVisible( slider );
@@ -128,16 +124,6 @@ void SimpleDELAYAudioProcessorEditor::onResetButtonClicked() {
     wetLevelSlider.setValue( DEFAULT_DELAY_SETTINGS.wetLevel );
     gainSlider.setValue( DEFAULT_DELAY_SETTINGS.gain );
     tempoSyncButton.setToggleState( DEFAULT_DELAY_SETTINGS.tempoSync, juce::sendNotification );
-}
-
-void SimpleDELAYAudioProcessorEditor::updateTempoSyncToggleState() {
-    std::cout << "toggle" << std::endl;
-    /*
-    auto state = tempoSyncButton.getToggleState();
-    if (state) {
-        tempoSyncButton.setToggleState( !state, juce::sendNotification );
-    }
-     */
 }
 
 std::vector<RotarySlider*> SimpleDELAYAudioProcessorEditor::getSliders() {
