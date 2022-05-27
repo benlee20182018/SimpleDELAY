@@ -35,7 +35,7 @@ Sets the trim level percentage in case the signal is too hot.
 
 ### Tempo Sync:
 
-Configures the plug-in to synchronize to the MIDI clock. User can select from a set of timing divisions.
+Configures the plug-in to synchronize to the MIDI clock. User can select from a set of time divisions.
 
 ### Reset Delay Settings:
 
