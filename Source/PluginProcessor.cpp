@@ -285,8 +285,8 @@ float MapSyncFactor(int option) {
 float CalculateDelayTime(const juce::AudioPlayHead::CurrentPositionInfo & info, int option) {
     float factor = MapSyncFactor( option );
     float secondsPerBeat = 60.0 / info.bpm;
-    auto numBeats = info.timeSigDenominator / factor;
-    auto result = numBeats * secondsPerBeat;
+    float numBeats = info.timeSigDenominator / factor;
+    float result = numBeats * secondsPerBeat;
     return result;
 }
 
