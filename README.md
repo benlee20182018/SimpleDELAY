@@ -33,6 +33,10 @@ Sets the gain level of the wet signal.
 
 Sets the trim level percentage in case the signal is too hot.
 
+### Tempo Sync:
+
+Configures the plug-in to synchronize to the MIDI clock. User can select from a set of timing divisions.
+
 ### Reset Delay Settings:
 
 Sets all controls back to factory defaults.
