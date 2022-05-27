@@ -68,13 +68,14 @@ class Delay
 {
 public:
     //==============================================================================
-    Delay()
+    Delay(float maxDelayTime=40.0, float leftDelayTime=1.0, float rightDelayTime=1.0, float wetLevel=0.8, float feedback=0.5)
     {
-        setMaxDelayTime (4.0f);
-        setDelayTime (0, 1.0f);
-        setDelayTime (1, 2.0f);
-        setWetLevel (0.8f);
-        setFeedback (0.5f);
+        setMaxDelayTime ( maxDelayTime );
+        setDelayTime (0, leftDelayTime);
+        setDelayTime (1, rightDelayTime);
+        setWetLevel (wetLevel);
+        setFeedback (feedback);
+        setGain( 1.0 );
     }
 
     //==============================================================================

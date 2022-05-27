@@ -10,7 +10,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-static const juce::NormalisableRange<float> DELAY_RANGE { 0.01f, 2.0f, 0.01f, 1.0f };
+static const juce::NormalisableRange<float> DELAY_RANGE { 0.01f, 20.0f, 0.01f, 1.0f };
 
 //==============================================================================
 SimpleDELAYAudioProcessor::SimpleDELAYAudioProcessor()
@@ -247,9 +247,10 @@ SimpleDELAYAudioProcessor::CreateParameterLayout()
           DEFAULT_DELAY_SETTINGS.gain ));
     
     layout.add(
-       std::make_unique<juce::AudioParameterBool>(
+       std::make_unique<juce::AudioParameterFloat>(
           DelaySettingIDs::TEMPO_SYNC,
           DelaySettingIDs::TEMPO_SYNC,
+          juce::NormalisableRange<float>( 1.0f, 7.0f, 1.0f, 1.0f ),
           DEFAULT_DELAY_SETTINGS.tempoSync ));
     
     return layout;
@@ -270,6 +271,26 @@ DelaySettings GetDelaySettings(juce::AudioProcessorValueTreeState& apvts) {
 }
 
 //==============================================================================
+float MapSyncFactor(int option) {
+    switch (option) {
+        case TempoSyncOptions::half: return 2.0;
+        case TempoSyncOptions::quarter: return 4.0;
+        case TempoSyncOptions::eighth: return 8.0;
+        case TempoSyncOptions::sixteenth: return 16.0;
+        case TempoSyncOptions::thirtysecond: return 32.0;
+        default: return 1.0;
+    }
+}
+
+float CalculateDelayTime(const juce::AudioPlayHead::CurrentPositionInfo & info, int option) {
+    float factor = MapSyncFactor( option );
+    float secondsPerBeat = 60.0 / info.bpm;
+    auto numBeats = info.timeSigDenominator / factor;
+    auto result = numBeats * secondsPerBeat;
+    return result;
+}
+
+//==============================================================================
 void SimpleDELAYAudioProcessor::updateDelaySettings() {
     auto delaySettings = GetDelaySettings( apvts );
     updateDelaySettings(delaySettings);
@@ -284,21 +305,19 @@ void SimpleDELAYAudioProcessor::updateDelaySettings(const DelaySettings & delayS
     auto leftDelayTime = delaySettings.leftDelayTime;
     auto rightDelayTime = delaySettings.rightDelayTime;
     
-    if ( delaySettings.tempoSync ) {
+    if ( delaySettings.tempoSync != TempoSyncOptions::off ) {
         if (auto * playHead = getPlayHead() ) {
             juce::AudioPlayHead::CurrentPositionInfo info;
             playHead->getCurrentPosition( info );
-            //std::cout << "BPM: " << info.bpm << std::endl;
-            //std::cout << "TS:  " << info.timeSigNumerator << "/" << info.timeSigDenominator << std::endl;
             
             if ( info.bpm > 0 ) {
-                auto time = 60 / info.bpm;
+                auto time = CalculateDelayTime( info, delaySettings.tempoSync );
                 
-                leftDelayTime = DELAY_RANGE.convertTo0to1( time );
-                rightDelayTime = DELAY_RANGE.convertTo0to1( time * 2 );
+                leftDelayTime = time;
+                rightDelayTime = time * 2;
                 
-                apvts.getParameter( DelaySettingIDs::LEFT_DELAY_TIME )->setValueNotifyingHost( leftDelayTime );
-                apvts.getParameter( DelaySettingIDs::RIGHT_DELAY_TIME )->setValueNotifyingHost( rightDelayTime );
+                apvts.getParameter( DelaySettingIDs::LEFT_DELAY_TIME )->setValueNotifyingHost( DELAY_RANGE.convertTo0to1( leftDelayTime ) );
+                apvts.getParameter( DelaySettingIDs::RIGHT_DELAY_TIME )->setValueNotifyingHost( DELAY_RANGE.convertTo0to1( rightDelayTime ) );
             }
         }
     }

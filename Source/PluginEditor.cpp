@@ -17,12 +17,16 @@ SimpleDELAYAudioProcessorEditor::SimpleDELAYAudioProcessorEditor (SimpleDELAYAud
     feedbackSliderAttachment   ( p.getState(), DelaySettingIDs::FEEDBACK,         feedbackSlider   ),
     wetLevelSliderAttachment   ( p.getState(), DelaySettingIDs::WET_LEVEL,        wetLevelSlider   ),
     gainSliderAttachment       ( p.getState(), DelaySettingIDs::GAIN,             gainSlider       ),
-    tempoSyncButtonAttachment  ( p.getState(), DelaySettingIDs::TEMPO_SYNC,       tempoSyncButton  ),
+    tempoSyncComboBoxAttachment( p.getState(), DelaySettingIDs::TEMPO_SYNC,       tempoSyncComboBox),
     audioProcessor (p)
 {
-    tempoSyncButton.setName( DelaySettingIDs::TEMPO_SYNC );
-    tempoSyncButton.setButtonText( DelaySettingIDs::TEMPO_SYNC );
-    addAndMakeVisible( tempoSyncButton );
+    for (auto i=0; i < TEMPO_SYNC_OPTIONS.size(); i++) {
+        tempoSyncComboBox.addItem( TEMPO_SYNC_OPTIONS[i], i+1 );
+    }
+    
+    tempoSyncComboBox.setSelectedId(1);
+    tempoSyncComboBox.onChange = [this] { onTempoSyncComboBoxChange(); };
+    addAndMakeVisible( tempoSyncComboBox );
     
     resetButton.setName( DelaySettingIDs::RESET );
     resetButton.setButtonText( DelaySettingIDs::RESET );
@@ -39,12 +43,14 @@ SimpleDELAYAudioProcessorEditor::SimpleDELAYAudioProcessorEditor (SimpleDELAYAud
     feedbackLabel.setText( DelaySettingIDs::FEEDBACK );
     wetLevelLabel.setText( DelaySettingIDs::WET_LEVEL );
     gainLabel.setText( DelaySettingIDs::GAIN );
+    tempoSyncLabel.setText( DelaySettingIDs::TEMPO_SYNC );
     
     addAndMakeVisible( leftDelayLabel );
     addAndMakeVisible( rightDelayLabel );
     addAndMakeVisible( feedbackLabel );
     addAndMakeVisible( wetLevelLabel );
     addAndMakeVisible( gainLabel );
+    addAndMakeVisible( tempoSyncLabel );
     
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -85,8 +91,7 @@ void SimpleDELAYAudioProcessorEditor::resized()
     auto leftDelayLabelArea = leftDelayArea.removeFromTop( bounds.getHeight() * 0.1 );
     auto rightDelayLabelArea = rightDelayArea.removeFromTop( bounds.getHeight() * 0.1 );
     
-    auto tempoSyncArea = leftDelayArea.removeFromBottom( bounds.getHeight() * 0.33 );
-    tempoSyncArea.removeFromLeft( 50 );
+    leftDelayArea.removeFromBottom( bounds.getHeight() * 0.33 );
     
     rightDelayArea.removeFromBottom( bounds.getHeight() * 0.33 );
     
@@ -96,7 +101,8 @@ void SimpleDELAYAudioProcessorEditor::resized()
     leftDelayLabel.setBounds( leftDelayLabelArea );
     rightDelayLabel.setBounds( rightDelayLabelArea );
     
-    tempoSyncButton.setBounds( tempoSyncArea );
+    tempoSyncLabel.setBounds( 83, 400, 100, 25 );
+    tempoSyncComboBox.setBounds( 83, 425, 100, 25 );
     
     auto labelHeight = 20;
     auto pad = 20;
@@ -123,7 +129,11 @@ void SimpleDELAYAudioProcessorEditor::onResetButtonClicked() {
     feedbackSlider.setValue( DEFAULT_DELAY_SETTINGS.feedback );
     wetLevelSlider.setValue( DEFAULT_DELAY_SETTINGS.wetLevel );
     gainSlider.setValue( DEFAULT_DELAY_SETTINGS.gain );
-    tempoSyncButton.setToggleState( DEFAULT_DELAY_SETTINGS.tempoSync, juce::sendNotification );
+    tempoSyncComboBox.setSelectedId( DEFAULT_DELAY_SETTINGS.tempoSync );
+}
+
+void SimpleDELAYAudioProcessorEditor::onTempoSyncComboBoxChange() {
+    
 }
 
 std::vector<RotarySlider*> SimpleDELAYAudioProcessorEditor::getSliders() {

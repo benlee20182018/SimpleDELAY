@@ -54,8 +54,8 @@ private:
     RotarySlider gainSlider;
     
     using APVTS = juce::AudioProcessorValueTreeState;
-    using SliderAttachment = APVTS::SliderAttachment;
     
+    using SliderAttachment = APVTS::SliderAttachment;
     SliderAttachment leftDelaySliderAttachment;
     SliderAttachment rightDelaySliderAttachment;
     SliderAttachment feedbackSliderAttachment;
@@ -67,16 +67,17 @@ private:
     Label feedbackLabel;
     Label wetLevelLabel;
     Label gainLabel;
+    Label tempoSyncLabel;
     
-    using ButtonAttachment = APVTS::ButtonAttachment;
-    
-    juce::ToggleButton tempoSyncButton;
-    ButtonAttachment tempoSyncButtonAttachment;
+    using ComboBoxAttachment = APVTS::ComboBoxAttachment;
+    juce::ComboBox tempoSyncComboBox;
+    ComboBoxAttachment tempoSyncComboBoxAttachment;
+    void onTempoSyncComboBoxChange();
     
     juce::TextButton resetButton;
+    void onResetButtonClicked();
     
     std::vector<RotarySlider*> getSliders();
-    void onResetButtonClicked();
 
 private:
     // This reference is provided as a quick way for your editor to

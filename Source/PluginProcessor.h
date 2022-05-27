@@ -12,13 +12,34 @@
 #include "Delay.h"
 
 //==============================================================================
+
+enum TempoSyncOptions {
+    off=1,
+    whole=2,
+    half=3,
+    quarter=4,
+    eighth=5,
+    sixteenth=6,
+    thirtysecond=7
+};
+
+static const std::vector<std::string> TEMPO_SYNC_OPTIONS {
+    std::string("Off"),
+    std::string("Whole note"),
+    std::string("1/2 note"),
+    std::string("1/4 note"),
+    std::string("1/8 note"),
+    std::string("1/16 note"),
+    std::string("1/32 note")
+};
+
 struct DelaySettings {
     float leftDelayTime  { 1.0f };
     float rightDelayTime { 2.0f };
     float feedback       { 0.5f };
     float wetLevel       { 0.8f };
     float gain           { 1.0f };
-    bool  tempoSync      { false };
+    float tempoSync      { 1.0f };
 };
 
 static const DelaySettings DEFAULT_DELAY_SETTINGS;
